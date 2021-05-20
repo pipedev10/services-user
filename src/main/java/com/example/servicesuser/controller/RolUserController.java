@@ -1,8 +1,7 @@
 package com.example.servicesuser.controller;
 
 import com.example.servicesuser.persistence.entity.RolUser;
-import com.example.servicesuser.persistence.entity.Users;
-import com.example.servicesuser.service.RolUserService;
+import com.example.servicesuser.service.RolUserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,27 +19,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class RolUserController {
 
   @Autowired
-  private RolUserService rolUserService;
+  private RolUserServiceImpl rolUserServiceImpl;
 
   @GetMapping("/all")
   public ResponseEntity<List<RolUser>> getAll(){
-    return new ResponseEntity<>(rolUserService.getAll(), HttpStatus.OK);
+    return new ResponseEntity<>(rolUserServiceImpl.getAll(), HttpStatus.OK);
   }
 
   @PostMapping("/save")
   public ResponseEntity<RolUser> save(@RequestBody RolUser rolUser){
-    return new ResponseEntity<>(rolUserService.save(rolUser), HttpStatus.CREATED);
+    return new ResponseEntity<>(rolUserServiceImpl.save(rolUser), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<RolUser>  getRolUser(@PathVariable("id") int roleId){
-    return rolUserService.getRolUser(roleId).map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+    return rolUserServiceImpl.getRolUser(roleId).map(user -> new ResponseEntity<>(user, HttpStatus.OK))
         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   @DeleteMapping("/delete/{id}")
   public ResponseEntity delete(@PathVariable("id") int rolId){
-    if(rolUserService.delete(rolId)){
+    if(rolUserServiceImpl.delete(rolId)){
       return new ResponseEntity(HttpStatus.OK);
     }else{
       return new ResponseEntity(HttpStatus.NOT_FOUND);

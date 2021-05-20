@@ -1,7 +1,7 @@
 package com.example.servicesuser.controller;
 
 import com.example.servicesuser.persistence.entity.Users;
-import com.example.servicesuser.service.UserService;
+import com.example.servicesuser.service.UserServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   @Autowired
-  private UserService userService;
+  private UserServiceImpl userService;
 
   @GetMapping("/greeting")
   public ResponseEntity<String> helloUser(){
@@ -50,5 +51,19 @@ public class UserController {
     }else{
       return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+  }
+
+  @PutMapping("/update/{id}")
+  public ResponseEntity<Users> update(@PathVariable("id") int userId, @RequestBody Users users) {
+    users.setUserId(userId);
+    return ResponseEntity.ok(userService.update(userId, users));
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<Users>  loginUser(@RequestBody Users users){
+    String userName = users.getUserName();
+    String password = users.getPassword();
+    return userService.loginUser(userName, password).map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
