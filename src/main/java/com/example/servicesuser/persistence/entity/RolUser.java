@@ -1,7 +1,7 @@
 package com.example.servicesuser.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,8 +24,9 @@ public class RolUser implements Serializable {
 
   private String name;
 
-/*  @OneToMany(mappedBy = "rolUser")
-  private Set<Users> users;*/
+  @JsonIgnoreProperties(value = { "rolUser", "password" })
+  @OneToMany(mappedBy = "rolUser")
+  Set<Users> users;
 
 
   public Integer getIdRol() {
@@ -44,13 +45,13 @@ public class RolUser implements Serializable {
     this.name = name;
   }
 
-/*  public Set<Users> getUsers() {
+  public Set<Users> getUsers() {
     return users;
   }
 
   public void setUsers(Set<Users> users) {
     this.users = users;
-  }*/
+  }
 
   @Override
   public String toString() {

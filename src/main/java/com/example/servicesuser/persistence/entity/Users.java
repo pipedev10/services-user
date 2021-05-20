@@ -1,5 +1,6 @@
 package com.example.servicesuser.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 @Table(name = "users")
 public class Users implements Serializable {
 
@@ -20,8 +23,6 @@ public class Users implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
   private Integer userId;
-  @Column(name = "username")
-  private String username;
 
   @Column(name = "username", insertable = false, updatable = false)
   private String userName;
@@ -30,9 +31,10 @@ public class Users implements Serializable {
   private String email;
   private Boolean active;
 
+  @JsonIgnoreProperties(value = { "users" })
   @ManyToOne
-  @JoinColumn(name = "id_rol", nullable=false)
-  public RolUser rolUser;
+  @JoinColumn(name = "id_rol")
+  RolUser rolUser;
 
   public Integer getUserId() {
     return userId;
@@ -66,7 +68,7 @@ public class Users implements Serializable {
     this.email = email;
   }
 
-  public Boolean getActive() {
+  public Boolean isActive() {
     return active;
   }
 
@@ -92,17 +94,5 @@ public class Users implements Serializable {
         ", active=" + active +
         ", rolUser=" + rolUser +
         '}';
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public Boolean isActive() {
-    return active;
   }
 }
