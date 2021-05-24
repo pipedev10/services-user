@@ -1,6 +1,8 @@
 package com.example.servicesuser.service;
 
+import com.example.servicesuser.persistence.entity.Users;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,19 +22,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //DAOUser user = userService.loginUser(username);
-    /*if (user == null) {
+    Optional<Users> user = userService.getUserByName(username);
+    if(user == null){
       throw new UsernameNotFoundException("User not found with username: " + username);
     }
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+    String password = bcryptEncoder.encode(user.get().getPassword());
+    return new User(user.get().getUserName(), password,
         new ArrayList<>());
-        */
-    if ("felipe".equals(username)) {
-      return new User("felipe", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-          new ArrayList<>());
-    } else {
-      throw new UsernameNotFoundException("User not found with username: " + username);
-    }
   }
 
 

@@ -8,4 +8,5 @@ public interface UserCrudRepository extends JpaRepository<Users, Integer> {
 
   Optional<Users> findByUserId(int userId);
   Optional<Users> findByUserNameAndPassword(String userName, String password);
+  Optional<Users> findByUserName(String userName);
 }
